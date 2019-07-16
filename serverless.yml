@@ -1,0 +1,27 @@
+service: vans-scraper
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: production
+  region: eu-west-1
+  timeout: 30
+  environment:
+    EMAIL_SERVICE_TO: ${file(./secrets.json):EMAIL_SERVICE_TO}
+    EMAIL_SERVICE_KEY: ${file(./secrets.json):EMAIL_SERVICE_KEY}
+    EMAIL_SERVICE_DOMAIN: ${file(./secrets.json):EMAIL_SERVICE_DOMAIN}
+
+package:
+ exclude:
+   - .secrets.json
+
+functions:
+  scraper:
+    handler: handler.scraper
+    description: 'Scrape sites and email the returned data'
+    events:
+      - schedule:
+        name: daily-update
+        description: 'Scheduled daily updated (09:00)'
+        rate: cron(0 8 * * ? *)
+        enabled: true

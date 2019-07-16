@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Zalando",
+        "url": "https://www.zalando.co.uk/vans-old-skool-trainers-black-va215b000-q11.html",
+        "query": "$('meta[name=\"twitter:data1\"]').attr('content')"
+    },
+    {
+        "name": "Office",
+        "url": "https://www.office.co.uk/view/product/office_catalog/5,21/2421801339050",
+        "query": "$('.js-price').attr('data-value')"
+    },
+    {
+        "name": "Vans",
+        "url": "https://www.vans.co.uk/shop/en/vans-gb/old-skool-shoes-vn000d3hbka",
+        "query": "$('meta[itemprop=\"price\"]').attr('content')"
+    },
+    {
+        "name": "Schuh",
+        "url": "https://www.schuh.co.uk/womens/vans-old-skool-black-trainers/1973657070/",
+        "query": "$('#price').text()"
+    },
+    {
+        "name": "House of Fraser",
+        "url": "https://www.houseoffraser.co.uk/brand/vans/old-skool-trainer-yc8761#colcode=yc876100",
+        "query": "$('meta[name=\"twitter:data1\"]').attr('content')"
+    }
+]
