@@ -6,20 +6,16 @@ const mailgun = require('mailgun-js');
 const sites = require('./sites.json');
 
 module.exports.scraper = async (event, context, callback) => {
-    console.log(event);
-    let results = [];
-    let table = [];
+    
+    const resultsArray = sites.map(item => {
+        let result = scraper(item);
+        return result;
+    });
 
-    for (let i = 0; i < sites.length; i++) {
-        let result = await scraper(sites[i]);
-        results.push(result);
-    }
-
-    for (let j = 0; j < results.length; j++) {
-        table.push('<tr><td><a href="' + results[j].url + '">' + results[j].site + '</a></td><td>' + results[j].price + '</td></tr>');
-    }
-
+    const results = await Promise.all(resultsArray);
+    const table = results.map(item => '<tr><td><a href="' + item.url + '">' + item.site + '</a></td><td>' + item.price + '</td></tr>');
     const response = await send('<table><tr><th>Shop</th><th>Price</th></tr>' + table.join('') + '</table>');
+
     return callback(null, response);
 };
 
@@ -36,17 +32,26 @@ class Model {
 };
 
 const scraper = store => {
-    return axios.get(store.url).then(response => {
-        try {
-            const $ = cheerio.load(response.data);
-            return new Model(
-                store.name,
-                store.url,
-                eval(store.query)
-            );
-        } catch (error) {
-            console.log(error);
+    return axios.get(store.url, {
+        headers: {'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36'}
+    }).then(({status, data}) => {
+        if (status === 200) {
+            try {
+                const $ = cheerio.load(data);
+                return new Model(
+                    store.name,
+                    store.url,
+                    eval(store.query)
+                );
+            } catch (error) {
+                console.log(error);
+            }
         }
+        return new Model(
+            store.name,
+            store.url,
+            'error'
+        );
     }).catch(error => console.log(error));
 };
 
