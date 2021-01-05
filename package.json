@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/m1ch34lj0hns0n/product-scraper#readme",
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.3",
     "mailgun-js": "^0.22.0"
   }
